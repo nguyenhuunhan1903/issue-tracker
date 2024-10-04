@@ -5,7 +5,6 @@ import React from 'react'
 import {AiFillBug} from 'react-icons/ai'
 const NavBar = () => {
     const currentPath=usePathname();
-    console.log(currentPath);
     const links=[
         {label:'dashboard',link:'/'},
         {label:'issues',link:'/issues'},
