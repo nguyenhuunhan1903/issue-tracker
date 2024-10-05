@@ -1,5 +1,5 @@
 'use client'
-import { Button, Callout, Text, TextArea, TextField } from '@radix-ui/themes'
+import { Button, Callout, Spinner, Text, TextArea, TextField } from '@radix-ui/themes'
 import React, { useState } from 'react'
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
@@ -13,6 +13,7 @@ import ErrorMessage from '@/app/components/ErrorMessage';
 type IssueForm = z.infer<typeof createIssueSchema>;
 const NewIssuePage = () => {
     const route = useRouter();
+    const [isSubmitting, setSubmit]=useState(false);
     const [error, setError] = useState('');
     const { register, control, handleSubmit,formState: { errors } } = useForm<IssueForm>({
         resolver: zodResolver(createIssueSchema)
@@ -25,9 +26,11 @@ const NewIssuePage = () => {
             <form className='space-y-3' onSubmit={handleSubmit(
                 async (data) => {
                     try {
+                        setSubmit(true);
                         await axios.post('/api/issues', data);
                         route.push("/issues");
                     } catch (error) {
+                        setSubmit(false);
                         setError('An unexpected error.')
                     }
                 }
@@ -41,7 +44,7 @@ const NewIssuePage = () => {
                     render={({ field }) => <SimpleMDE placeholder='Description' {...field} />}
                 />
                 {errors.description && <ErrorMessage>{errors.description?.message}</ErrorMessage>}
-                <Button>Submit new Issues</Button>
+                <Button disabled={isSubmitting}>Submit new Issues{isSubmitting && <Spinner/>}</Button>
             </form>
         </div>
     )
