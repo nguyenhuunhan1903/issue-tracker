@@ -6,7 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createIssueSchema } from '@/app/validationSchemas';
+import { issueSchema } from '@/app/validationSchemas';
 import {z} from 'zod';
 import ErrorMessage from '@/app/components/ErrorMessage';
 import dynamic from 'next/dynamic';
@@ -16,14 +16,14 @@ interface Props{
     issue?: Issue
 }
 
-type IssueFormData = z.infer<typeof createIssueSchema>;
+type IssueFormData = z.infer<typeof issueSchema>;
 const SimpleMDE=dynamic(()=>import('react-simplemde-editor'),{ssr:false});
 const IssueForm = ({issue}:Props) => {
     const route = useRouter();
     const [isSubmitting, setSubmit]=useState(false);
     const [error, setError] = useState('');
     const { register, control, handleSubmit,formState: { errors } } = useForm<IssueFormData>({
-        resolver: zodResolver(createIssueSchema)
+        resolver: zodResolver(issueSchema)
     });
     return (
         <div className='mx-auto max-w-xl space-y-3'>
