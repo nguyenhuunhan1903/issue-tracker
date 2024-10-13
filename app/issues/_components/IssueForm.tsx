@@ -33,9 +33,13 @@ const IssueForm = ({issue}:Props) => {
             <form className='space-y-3' onSubmit={handleSubmit(
                 async (data) => {
                     try {
+                        if(issue)
+                            await axios.patch('/api/issues/'+issue.id,data);
+                        else
+                            await axios.post('/api/issues', data);
                         setSubmit(true);
-                        await axios.post('/api/issues', data);
                         route.push("/issues");
+                        route.refresh();
                     } catch (error) {
                         setSubmit(false);
                         setError('An unexpected error.')
@@ -52,7 +56,7 @@ const IssueForm = ({issue}:Props) => {
                     render={({ field }) => <SimpleMDE placeholder='Description' {...field} />}
                 />
                 {errors.description && <ErrorMessage>{errors.description?.message}</ErrorMessage>}
-                <Button disabled={isSubmitting}>Submit new Issues{isSubmitting && <Spinner/>}</Button>
+                <Button disabled={isSubmitting}>{issue?'Update Issue':'Submit new Issues'}{isSubmitting && <Spinner/>}</Button>
             </form>
         </div>
     )
