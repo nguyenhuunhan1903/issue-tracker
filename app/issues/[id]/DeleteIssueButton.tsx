@@ -31,7 +31,7 @@ const DeleteIssueButton = ({ issueId }: Props) => {
             <AlertDialog.Action>
               <Button color='red' onClick={async () => {
                 try {
-                  setIsDelete(true);
+                  setIsDelete(true); 
                   await axios.delete('/api/issues/' + issueId);
                   router.push('/issues');
                   router.refresh();
