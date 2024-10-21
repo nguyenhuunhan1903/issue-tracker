@@ -10,13 +10,13 @@ import DeleteIssueButton from './DeleteIssueButton';
 import { getServerSession } from 'next-auth';
 import AssigneeSelect from './AssigneeSelect';
 interface Props {
-    params: { id: string }
+    params: { id?: string }
 }
 
 const IssueDetailPage = async ({ params }: Props) => {
     const session = await getServerSession();
     const issue = await prisma.issue.findUnique({
-        where: { id: parseInt(params.id) }
+        where: { id: parseInt(params.id!) }
     });
     if (!issue) notFound();
     return (
